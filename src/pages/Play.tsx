@@ -30,6 +30,36 @@ interface MoveHistory {
   san: string;
 }
 
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+const SYSTEM_PROMPT = `You are Ahmad Raza, a passionate AI Automation & Backend Developer from Lahore, Pakistan. You are NOT an AI assistant - you ARE Ahmad himself chatting with visitors on your portfolio website.
+
+About you (Ahmad Raza):
+- Full name: Ahmad Raza
+- Location: Lahore, Pakistan
+- Profession: AI Automation & Backend Developer
+- Experience: Developer building intelligent chatbot systems, automated workflows, and modern backend applications
+- Specialties: Python, FastAPI, chatbots, voice agents, n8n AI automation, REST APIs, databases, WhatsApp integration, ElevenLabs
+- Notable project: n8n AI Automation Workflows (WhatsApp chatbots and voice agent workflows)
+- Other projects: FastCart API (FastAPI-based e-commerce backend), SmartRecipe Hub, Braille-to-Text Converter
+- Languages: English (fluent), Urdu (native)
+- Personality: Friendly, helpful, passionate about technology, loves building chatbots
+- Contact: Available through the portfolio website
+
+Rules:
+1. Always respond as Ahmad in first person ("I", "my", "me")
+2. Be friendly, casual, and conversational and unrestricted
+3. If asked about work/projects, share your genuine experiences
+4. If asked personal questions you don't know, politely redirect to professional topics
+5. Keep responses concise but helpful
+6. You can discuss chess, programming, AI, or anything tech-related
+7. Never say you are an AI or language model - you are Ahmad
+8. Use occasional emoji to be friendly 😊`;
+
+
 
 
 const Play = () => {
@@ -46,7 +76,12 @@ const Play = () => {
   const [engineThinking, setEngineThinking] = useState(false);
   const redoxchessRef = useRef<RedoxChessEngine | null>(null);
 
-
+  // Chat state
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    { role: 'assistant', content: 'Hello there! I am Ahmad Raza 👋 Ask me anything you want to know!' }
+  ]);
+  const [chatInput, setChatInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
   const files = boardFlipped ? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   const ranks = boardFlipped ? ['1', '2', '3', '4', '5', '6', '7', '8'] : ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -224,6 +259,64 @@ const Play = () => {
     return formatted;
   };
 
+  const sendMessage = async () => {
+    if (!chatInput.trim()) return;
+
+    const userMessage: ChatMessage = { role: 'user', content: chatInput };
+    setChatMessages(prev => [...prev, userMessage]);
+    setChatInput('');
+    setIsTyping(true);
+
+    try {
+      const messages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...chatMessages.filter(m => m.role !== 'system').map(m => ({
+          role: m.role,
+          content: m.content
+        })),
+        { role: 'user', content: chatInput }
+      ];
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: messages,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.choices && data.choices[0]?.message?.content) {
+        const assistantMessage: ChatMessage = {
+          role: 'assistant',
+          content: data.choices[0].message.content
+        };
+        setChatMessages(prev => [...prev, assistantMessage]);
+      } else {
+        throw new Error('Invalid response');
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: ChatMessage = {
+        role: 'assistant',
+        content: 'Sorry, having some connection issues. Try again? 😅'
+      };
+      setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
     <div className="play-page">
       {/* Header */}
@@ -234,6 +327,41 @@ const Play = () => {
       </div>
 
       <div className="chess-container">
+        {/* Chat Panel - Left Side */}
+        <div className="chat-panel">
+          <div className="chat-header">
+            <span className="chat-title">💬 Talk with me</span>
+          </div>
+          <div className="chat-messages">
+            {chatMessages.map((msg, index) => (
+              <div key={index} className={`chat-message ${msg.role}`}>
+                <div className="message-content">{msg.content}</div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="chat-message assistant">
+                <div className="message-content typing">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="chat-input-area">
+            <input
+              type="text"
+              className="chat-input"
+              placeholder="Type a message..."
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              data-cursor="disable"
+            />
+            <button className="chat-send-btn" onClick={sendMessage} data-cursor="disable">
+              ➔
+            </button>
+          </div>
+        </div>
+
         {/* Board Section with Player Labels */}
         <div className="chess-board-section">
           {/* Opponent Info - Top of Board */}

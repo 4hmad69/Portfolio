@@ -100,9 +100,9 @@ body:has(.play-page) {
 /* Chess Container */
 .chess-container {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   max-width: 1400px;
   position: relative;
