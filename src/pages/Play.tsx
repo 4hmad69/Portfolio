@@ -277,27 +277,67 @@ const Play = () => {
         { role: 'user', content: chatInput }
       ];
 
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: messages,
-        }),
-      });
+      let response: Response | null = null;
+      let useFallback = false;
 
-      const data = await response.json();
+      try {
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: messages,
+          }),
+        });
 
-      if (data.choices && data.choices[0]?.message?.content) {
-        const assistantMessage: ChatMessage = {
-          role: 'assistant',
-          content: data.choices[0].message.content
-        };
-        setChatMessages(prev => [...prev, assistantMessage]);
-      } else {
-        throw new Error('Invalid response');
+        if (!response || response.status === 404) {
+          useFallback = true;
+        }
+      } catch (err) {
+        useFallback = true;
       }
+
+      let responseText = "";
+      if (useFallback) {
+        // Fallback: Call Groq API directly from the client side during local development
+        const localApiKey = import.meta.env.VITE_GROQ_API_KEY || "";
+        const localModel = import.meta.env.VITE_GROQ_MODEL || "openai/gpt-oss-120b";
+
+        const directResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localApiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            messages,
+            model: localModel,
+            temperature: 0.7,
+            max_tokens: 1024
+          })
+        });
+
+        const directData = await directResponse.json();
+        if (directResponse.ok && directData.choices && directData.choices[0]?.message?.content) {
+          responseText = directData.choices[0].message.content;
+        } else {
+          throw new Error(directData.error?.message || 'Failed direct call to Groq');
+        }
+      } else if (response) {
+        const data = await response.json();
+        if (data.choices && data.choices[0]?.message?.content) {
+          responseText = data.choices[0].message.content;
+        } else {
+          throw new Error('Invalid response');
+        }
+      }
+
+      const assistantMessage: ChatMessage = {
+        role: 'assistant',
+        content: responseText
+      };
+      setChatMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage: ChatMessage = {
