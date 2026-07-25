@@ -4,6 +4,8 @@ import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
 import Lenis from "lenis";
 import "./styles/Navbar.css";
+import { config } from "../config";
+import { showToast } from "../utils/toast";
 
 gsap.registerPlugin(ScrollTrigger);
 export let lenis: Lenis | null = null;
@@ -70,11 +72,15 @@ const Navbar = () => {
           AR
         </a>
         <a
-          href="mailto:4hmadraza021@gmail.com"
+          href={`mailto:${config.contact.email}`}
           className="navbar-connect"
           data-cursor="disable"
+          onClick={() => {
+            navigator.clipboard.writeText(config.contact.email);
+            showToast("Email copied to clipboard!");
+          }}
         >
-          4hmadraza021@gmail.com
+          {config.contact.email}
         </a>
         <ul>
           <li>

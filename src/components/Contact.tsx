@@ -4,6 +4,7 @@ import { config } from "../config";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
+import { showToast } from "../utils/toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,7 +65,14 @@ const Contact = () => {
           <div className="contact-box">
             <h4>Email</h4>
             <p>
-              <a href={`mailto:${config.contact.email}`} data-cursor="disable">
+              <a
+                href={`mailto:${config.contact.email}`}
+                data-cursor="disable"
+                onClick={() => {
+                  navigator.clipboard.writeText(config.contact.email);
+                  showToast("Email copied to clipboard!");
+                }}
+              >
                 {config.contact.email}
               </a>
             </p>
