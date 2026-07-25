@@ -41,7 +41,7 @@ export const config = {
                 "Designing SQLite/PostgreSQL schemas, role-based admin routing, and CRUD operations",
                 "Writing and organizing API test suites and managing endpoints validation"
             ],
-            technologies: ["Python", "FastAPI", "SQLite", "PostgreSQL", "Pydantic", "React", "JWT"]
+            technologies: ["Python", "FastAPI", "SQLite", "PostgreSQL", "Pydantic", "JWT"]
         },
         {
             position: "Software Engineering Student",

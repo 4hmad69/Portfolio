@@ -24,29 +24,29 @@ const techStack: TechItem[][] = [
     { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", url: "https://git-scm.com" },
     { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", url: "https://github.com" },
   ],
-  // Row 2 - 10 items (Backend & Web Architecture)
+  // Row 2 - 10 items (AI & Core Backend Orchestration)
   [
     { name: "FastAPI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg", url: "https://fastapi.tiangolo.com" },
     { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", url: "https://nodejs.org" },
     { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg", url: "https://expressjs.com" },
-    { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", url: "https://react.dev" },
+    { name: "LangChain", icon: "https://img.icons8.com/color/48/parrot.png", url: "https://langchain.com" },
+    { name: "LangGraph", icon: "https://img.icons8.com/color/48/mind-map.png", url: "https://langchain-ai.github.io/langgraph/" },
+    { name: "LangSmith", icon: "https://img.icons8.com/color/48/line-chart.png", url: "https://smith.langchain.com" },
+    { name: "Ollama", icon: "https://ollama.com/public/ollama.png", url: "https://ollama.com" },
     { name: "Pydantic", icon: "https://raw.githubusercontent.com/pydantic/brand/main/pydantic-logo-square-120px-transparent.svg", url: "https://docs.pydantic.dev" },
     { name: "SQLAlchemy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlalchemy/sqlalchemy-original.svg", url: "https://www.sqlalchemy.org" },
     { name: "Alembic", icon: "https://img.icons8.com/color/48/database-export.png", url: "https://alembic.zzzeek.org" },
+  ],
+  // Row 3 - 8 items (APIs, Integration & Automation)
+  [
     { name: "REST APIs", icon: "https://img.icons8.com/color/48/api.png", url: "https://en.wikipedia.org/wiki/REST" },
     { name: "JWT", icon: "https://jwt.io/img/pic_logo.svg", url: "https://jwt.io" },
     { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg", url: "https://postman.com" },
-  ],
-  // Row 3 - 8 items (AI & Agentic Orchestration)
-  [
-    { name: "LangChain", icon: "https://img.icons8.com/color/48/parrot.png", url: "https://langchain.com" },
-    { name: "LangGraph", icon: "https://img.icons8.com/color/48/mind-map.png", url: "https://langchain-ai.github.io/langgraph/" },
-    { name: "Langsmith", icon: "https://img.icons8.com/color/48/line-chart.png", url: "https://smith.langchain.com" },
     { name: "n8n", icon: "https://raw.githubusercontent.com/n8n-io/n8n/master/assets/n8n-logo.png", url: "https://n8n.io" },
     { name: "ElevenLabs", icon: "https://img.icons8.com/color/48/audio-wave.png", url: "https://elevenlabs.io" },
     { name: "WhatsApp API", icon: "https://img.icons8.com/color/48/whatsapp.png", url: "https://developers.facebook.com/docs/whatsapp" },
     { name: "Webhooks", icon: "https://img.icons8.com/color/48/api.png", url: "https://en.wikipedia.org/wiki/Webhook" },
-    { name: "Ollama", icon: "https://ollama.com/public/ollama.png", url: "https://ollama.com" },
+    { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", url: "https://docker.com" },
   ],
   // Row 4 - 6 items (Databases & DevOps)
   [
@@ -54,20 +54,20 @@ const techStack: TechItem[][] = [
     { name: "pgvector", icon: "https://img.icons8.com/color/48/grid.png", url: "https://github.com/pgvector/pgvector" },
     { name: "SQLite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg", url: "https://sqlite.org" },
     { name: "Redis", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg", url: "https://redis.io" },
-    { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", url: "https://docker.com" },
     { name: "Compose", icon: "https://img.icons8.com/color/48/docker.png", url: "https://docs.docker.com/compose/" },
+    { name: "Streamlit", icon: "https://streamlit.io/images/brand/streamlit-mark-color.png", url: "https://streamlit.io" },
   ],
   // Row 5 - 4 items (Quality & Development Tools)
   [
-    { name: "Streamlit", icon: "https://streamlit.io/images/brand/streamlit-mark-color.png", url: "https://streamlit.io" },
     { name: "Pytest", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytest/pytest-original.svg", url: "https://pytest.org" },
     { name: "Ruff", icon: "https://img.icons8.com/color/48/checked-checkbox.png", url: "https://docs.astral.sh/ruff/" },
     { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg", url: "https://code.visualstudio.com" },
-  ],
-  // Row 6 - 2 items (NLP & Design - Pyramid Tip)
-  [
     { name: "Hugging Face", icon: "https://huggingface.co/front/assets/huggingface_logo-noborder.svg", url: "https://huggingface.co" },
+  ],
+  // Row 6 - 2 items (Design & Frontend Tooling)
+  [
     { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg", url: "https://figma.com" },
+    { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg", url: "https://vite.dev" },
   ],
 ];
 
